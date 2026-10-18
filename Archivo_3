@@ -1,0 +1,67 @@
+// Importamos la librería del mapa que instalaremos con Vite
+import L from 'leaflet';
+
+// 1. Inicializar el mapa centrado en Bogotá por defecto
+const map = L.map('map').setView([4.6097, -74.0817], 13);
+
+// 2. Cargar el diseño visual del mapa (usamos OpenStreetMap que es gratis)
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '© OpenStreetMap'
+}).addTo(map);
+
+const statusText = document.getElementById('status-text');
+let userMarker;
+
+// 3. Función para buscar el GPS del usuario
+function ubicarUsuario() {
+  if (!navigator.geolocation) {
+    statusText.innerText = "Tu navegador no soporta GPS.";
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      // Centrar el mapa en la posición real
+      map.setView([lat, lng], 16);
+
+      // Poner un marcador (pin) en el mapa
+      if (userMarker) {
+        userMarker.setLatLng([lat, lng]);
+      } else {
+        userMarker = L.marker([lat, lng]).addTo(map)
+          .bindPopup("¡Estás aquí!").openPopup();
+      }
+
+      statusText.innerText = "Ubicación encontrada.";
+    },
+    () => {
+      statusText.innerText = "No se pudo obtener tu ubicación. Verifica los permisos.";
+    }
+  );
+}
+
+// 4. Lógica del botón "Modo Vendedor"
+const vendorButton = document.getElementById('toggle-vendor-mode');
+let isVendor = false;
+
+vendorButton.addEventListener('click', () => {
+  isVendor = !isVendor; // Cambia entre verdadero y falso
+  
+  if (isVendor) {
+    vendorButton.classList.add('active');
+    vendorButton.innerText = "Activo (Vendiendo)";
+    statusText.innerText = "Tu ubicación ahora es visible para los compradores.";
+    // Aquí a futuro enviaremos la ubicación a una base de datos
+  } else {
+    vendorButton.classList.remove('active');
+    vendorButton.innerText = "Modo Vendedor";
+    statusText.innerText = "Buscando comida cerca de ti...";
+  }
+});
+
+// Ejecutar el GPS al abrir la app
+ubicarUsuario();
