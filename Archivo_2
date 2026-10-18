@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Radar de Antojos</title>
+    <!-- Aquí traemos el estilo del mapa -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Aquí conectaremos nuestros propios colores más adelante -->
+    <link rel="stylesheet" href="/src/style.css">
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Radar de Antojos</h1>
+      <button id="toggle-vendor-mode" class="btn-primary">Modo Vendedor</button>
+    </header>
+    
+    <!-- Este espacio vacío es donde aparecerá el mapa mágicamente -->
+    <main id="map" style="height: 400px; width: 100%;"></main>
+
+    <!-- Barra en la parte inferior -->
+    <footer class="bottom-sheet">
+      <p id="status-text">Buscando comida cerca de ti...</p>
+    </footer>
+
+    <!-- Aquí conectaremos la lógica del GPS más adelante -->
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
